@@ -17,7 +17,7 @@ public class Cow : Animal
 
     public override void MakeSound(string dialogue)
     {
-        Debug.Log("Mooo!");
+        base.MakeSound("Mooo!");
     }
 
     public void Moo()
