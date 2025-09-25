@@ -9,21 +9,27 @@ public class Cow : Animal
         private set => milk = (value <= 0) ? 0 : value;
     }
 
-    public override void Init(string newName, int newHunger, int newHappy) 
+    public void Init(string newName, FoodType preferredFood) 
     {
-        base.Init(newName, newHunger, newHappy);
+        base.Init(newName, preferredFood);
         Milk = 0;
     }
 
-    public override void MakeSound(string dialogue)
+    public override void MakeSound()
     {
-        base.MakeSound("Mooo!");
+        Debug.Log($"{Name} said Mooo!");
     }
 
     public void Moo()
     {
         Debug.Log($"{Name} mooed very loudly! Looks like someone's in a good mood. Happiness increased by 10!");
         base.AdjustHappiness(10);
+    }
+
+    public override void Produce()
+    {
+        Milk += 2;
+        Debug.Log($"{Name} produced 2 milk!");
     }
 
     public override void GetStatus()

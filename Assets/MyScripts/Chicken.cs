@@ -10,15 +10,15 @@ public class Chicken : Animal
         private set => eggs = (value <= 0) ? 0 : value;
     }
 
-    public override void Init(string newName, int newHunger, int newHappy) 
+    public void Init(string newName, FoodType preferredFood) 
     {
-        base.Init(newName, newHunger, newHappy);
+        base.Init(newName, preferredFood);
         Eggs = 0;
     }
 
-    public override void MakeSound(string dialogue)
+    public override void MakeSound()
     {
-        base.MakeSound("B'kawk!");
+        Debug.Log($"{Name} said B'kawk!");
     }
 
     public void Sleep()
@@ -27,7 +27,12 @@ public class Chicken : Animal
         base.AdjustHunger(-2);
         base.AdjustHappiness(5);
     }
-    
+    public override void Produce()
+    {
+        Eggs += 2;
+        Debug.Log($"{Name} produced 2 eggs!");
+    }
+
     public override void GetStatus()
     {
         base.GetStatus();

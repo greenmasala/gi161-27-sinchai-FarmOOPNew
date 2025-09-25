@@ -1,60 +1,117 @@
+using System;
 using UnityEngine;
-
-public class Animal : MonoBehaviour
+public enum FoodType { Hay, Seeds, Slop };
+public abstract class Animal : MonoBehaviour
 {
+    private int maxHappy = 100;
+    private int maxHunger = 100;
+    private int timesFed = 0;
+
     private string name;
     public string Name
     {
         get => name;
-        private set => name = string.IsNullOrEmpty(value) ? "Unknown" : value; 
+        private set => name = string.IsNullOrEmpty(value) ? "Unknown" : value;
     }
-    
+
     private int hunger;
     public int Hunger
     {
         get => hunger;
-        private set => hunger = (value <= 0) ? 0 : (value >= 50) ? 50 : value;
+        private set => hunger = (value <= 0) ? 0 : (value > 100) ? 100 : value;
     }
 
     private int happiness;
     public int Happiness
     {
         get => happiness;
-        private set => happiness = (value <= 0) ? 0 : (value >= 50) ? 50 : value;
+        private set => happiness = (value <= 0) ? 0 : (value > 100) ? 100 : value;
     }
 
-    public virtual void Init(string newName, int newHunger, int newHappy) 
+    private FoodType preferredFood;
+    public FoodType PreferredFood { get; private set; }
+    
+
+    public void Init(string newName, FoodType preferredFood)
     {
+        Name = newName;
+        Hunger = 50;
+        Happiness = 50;
+        PreferredFood = preferredFood;
+    }
+
+    /*public void Init(string newName, int newHunger, int newHappy)
+    {
+        newHunger = 50;
+        newHappy = 50;
+
         Name = newName;
         Hunger = newHunger;
         Happiness = newHappy;
-    }
+    }*/
 
-    public void AdjustHunger(int hungerChange) 
+    public void AdjustHunger(int hungerChange)
     {
-        Hunger -= hungerChange;
+        Hunger = Mathf.Clamp(Hunger - hungerChange, 0, maxHunger);
     }
 
     public void AdjustHappiness(int happinessChange)
     {
-        Happiness += happinessChange;
+        Happiness = Mathf.Clamp(Happiness + happinessChange, 0, maxHappy);
     }
 
-    public virtual void MakeSound(string dialogue)
+    public abstract void MakeSound();
+
+    public abstract void Produce();
+   
+    public void Feed(int amount)
     {
-        Debug.Log($"{Name} said {dialogue}");
-    }
-    public void Feed(int amount) 
-    {
-        Debug.Log($"{amount} of food was fed to {Name}. Hunger decreased by {amount}!");
+        int happinessVal = amount / 2;
+        Debug.Log($" {amount} of food was fed to {Name}. Hunger decreased by {amount} and Happiness increased by {happinessVal}!");
         AdjustHunger(amount);
+        AdjustHappiness(happinessVal);
     }
 
-    public void Feed(string food, int amount) 
+    public void Feed(FoodType preferredFood, int amount)
     {
-        Debug.Log($" {amount} of {food} was fed to {Name}. Hunger decreased by {amount} and Happiness increased by 5!");
-        AdjustHunger(amount);
-        AdjustHappiness(5);
+        int happinessVal = amount / 2;
+
+        if (timesFed == 2)
+        {
+            timesFed = 0;
+            Debug.Log($" {amount} of {preferredFood} was fed to {Name}. Looks like {Name} is starting to get bored of {preferredFood}... Hunger decreased by {amount} and Happiness decreased by 5!");
+            AdjustHunger(amount);
+            AdjustHappiness(-5);
+            Debug.Log(timesFed);
+        }
+
+        if (PreferredFood == preferredFood)
+        {
+            timesFed++;
+            if (timesFed != 2)
+            {
+                Debug.Log($" {amount} of {preferredFood} was fed to {Name}. Looks like {Name} really liked the {preferredFood}! Hunger decreased by {amount} and Happiness increased by {happinessVal}!");
+                AdjustHunger(amount);
+                AdjustHappiness(happinessVal);
+                Debug.Log(timesFed);
+            }
+            else
+            {
+                timesFed = 0;
+                Debug.Log($" {amount} of {preferredFood} was fed to {Name}. Looks like {Name} is starting to get bored of {preferredFood}... Hunger decreased by {amount} and Happiness decreased by 5!");
+                AdjustHunger(amount);
+                AdjustHappiness(-5);
+                Debug.Log(timesFed);
+            }
+        }
+        else
+        {
+            timesFed = 0;
+            Debug.Log($"{amount} of {preferredFood} was fed to {Name}. Looks like {Name} didn't like it much... Hunger decreased by {amount} but Happiness decreased by {happinessVal}!");
+            AdjustHunger(amount);
+            AdjustHappiness(-happinessVal);
+            Debug.Log(timesFed);
+        }
     }
 
     public virtual void GetStatus()

@@ -3,14 +3,27 @@ using UnityEngine;
 
 public class Pig : Animal
 {
-    public override void Init(string newName, int newHunger, int newHappy) 
+    private float dirt;
+    public float Dirt
     {
-        base.Init(newName, newHunger, newHappy);
+        get => dirt;
+        private set => dirt = (value <= 0) ? 0 : value;
+    }
+    public void Init(string newName, FoodType preferredFood) 
+    {
+        base.Init(newName, preferredFood);
+        Dirt = 0;
     }
 
-    public override void MakeSound(string dialogue)
+    public override void MakeSound()
     {
-        base.MakeSound("Snorts!");
+        Debug.Log($"{Name} said Snorts!");
+    }
+
+    public override void Produce()
+    {
+        Dirt += 2;
+        Debug.Log($"{Name} produced 2 dirt!");
     }
 
     public override void GetStatus()
