@@ -9,9 +9,9 @@ public class Pig : Animal
         get => dirt;
         private set => dirt = (value <= 0) ? 0 : value;
     }
-    public void Init(string newName, FoodType preferredFood) 
+    public void Init(string newName) 
     {
-        base.Init(newName, preferredFood);
+        base.Init(newName, FoodType.Slop);
         Dirt = 0;
     }
 
@@ -20,14 +20,21 @@ public class Pig : Animal
         Debug.Log($"{Name} said Snorts!");
     }
 
-    public override void Produce()
+    public override string Produce()
     {
-        Dirt += 2;
-        Debug.Log($"{Name} produced 2 dirt!");
+        string defaultText = $"{Name} produced nothing due to not being happy enough.";
+        if (Happiness >= 50)
+        {
+            int amount = Happiness*1/2;
+            Dirt += amount;
+            Debug.Log($"{Name} produced {amount} dirt!");
+        }
+        return defaultText;
     }
 
     public override void GetStatus()
     {
         base.GetStatus();
+        Debug.Log($" Dirt: {Dirt}");
     }
 }

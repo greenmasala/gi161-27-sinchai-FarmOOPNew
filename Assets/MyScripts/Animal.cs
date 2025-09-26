@@ -1,11 +1,11 @@
+using OpenCover.Framework.Model;
 using System;
 using UnityEngine;
-public enum FoodType { Hay, Seeds, Slop };
+public enum FoodType { Hay, Seeds, Slop, RottenFood, AnimalFood };
 public abstract class Animal : MonoBehaviour
 {
     private int maxHappy = 100;
     private int maxHunger = 100;
-    private int timesFed = 0;
 
     private string name;
     public string Name
@@ -25,12 +25,11 @@ public abstract class Animal : MonoBehaviour
     public int Happiness
     {
         get => happiness;
-        private set => happiness = (value <= 0) ? 0 : (value > 100) ? 100 : value;
+        protected set => happiness = (value <= 0) ? 0 : (value > 100) ? 100 : value;
     }
 
     private FoodType preferredFood;
     public FoodType PreferredFood { get; private set; }
-    
 
     public void Init(string newName, FoodType preferredFood)
     {
@@ -62,7 +61,7 @@ public abstract class Animal : MonoBehaviour
 
     public abstract void MakeSound();
 
-    public abstract void Produce();
+    public abstract string Produce();
    
     public void Feed(int amount)
     {
@@ -72,45 +71,25 @@ public abstract class Animal : MonoBehaviour
         AdjustHappiness(happinessVal);
     }
 
-    public void Feed(FoodType preferredFood, int amount)
+    public void Feed(FoodType chosenFood, int amount)
     {
-        int happinessVal = amount / 2;
-
-        if (timesFed == 2)
+        if (chosenFood == PreferredFood)
         {
-            timesFed = 0;
-            Debug.Log($" {amount} of {preferredFood} was fed to {Name}. Looks like {Name} is starting to get bored of {preferredFood}... Hunger decreased by {amount} and Happiness decreased by 5!");
+            Debug.Log($" {amount} of {chosenFood} was fed to {Name}. Looks like {Name} really liked the {chosenFood}! Hunger decreased by {amount} and Happiness increased by 15!");
             AdjustHunger(amount);
-            AdjustHappiness(-5);
-            Debug.Log(timesFed);
+            AdjustHappiness(15);
         }
-
-        if (PreferredFood == preferredFood)
+        else if (chosenFood == FoodType.RottenFood)
         {
-            timesFed++;
-            if (timesFed != 2)
-            {
-                Debug.Log($" {amount} of {preferredFood} was fed to {Name}. Looks like {Name} really liked the {preferredFood}! Hunger decreased by {amount} and Happiness increased by {happinessVal}!");
-                AdjustHunger(amount);
-                AdjustHappiness(happinessVal);
-                Debug.Log(timesFed);
-            }
-            else
-            {
-                timesFed = 0;
-                Debug.Log($" {amount} of {preferredFood} was fed to {Name}. Looks like {Name} is starting to get bored of {preferredFood}... Hunger decreased by {amount} and Happiness decreased by 5!");
-                AdjustHunger(amount);
-                AdjustHappiness(-5);
-                Debug.Log(timesFed);
-            }
+            Debug.Log($" {amount} of {chosenFood} was fed to {Name}. Looks like {Name} really didn't like that! Hunger decreased by {amount} but Happiness decreased by 20!");
+            AdjustHunger(amount);
+            AdjustHappiness(-20);
         }
         else
         {
-            timesFed = 0;
-            Debug.Log($"{amount} of {preferredFood} was fed to {Name}. Looks like {Name} didn't like it much... Hunger decreased by {amount} but Happiness decreased by {happinessVal}!");
+            Debug.Log($"{amount} of {chosenFood} was fed to {Name}. Looks like {Name} didn't like it that much, but still ate it... Hunger decreased by {amount} but Happiness decreased by 5!");
             AdjustHunger(amount);
-            AdjustHappiness(-happinessVal);
-            Debug.Log(timesFed);
+            AdjustHappiness(-5);
         }
     }
 

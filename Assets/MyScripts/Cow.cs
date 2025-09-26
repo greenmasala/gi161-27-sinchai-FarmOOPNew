@@ -9,9 +9,9 @@ public class Cow : Animal
         private set => milk = (value <= 0) ? 0 : value;
     }
 
-    public void Init(string newName, FoodType preferredFood) 
+    public void Init(string newName) 
     {
-        base.Init(newName, preferredFood);
+        base.Init(newName, FoodType.Hay);
         Milk = 0;
     }
 
@@ -26,10 +26,16 @@ public class Cow : Animal
         base.AdjustHappiness(10);
     }
 
-    public override void Produce()
+    public override string Produce()
     {
-        Milk += 2;
-        Debug.Log($"{Name} produced 2 milk!");
+        string defaultText = $"{Name} produced nothing due to not being happy enough.";
+        if (Happiness > 70)
+        {
+            int amount = Happiness / 20;
+            Milk += amount;
+            Debug.Log($"{Name} produced {amount} of milk!");
+        }
+        return defaultText;
     }
 
     public override void GetStatus()

@@ -12,9 +12,9 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        chicken.Init("KFC", FoodType.Seeds);
-        cow.Init("Burger King", FoodType.Hay);
-        pig.Init("Porkshop", FoodType.Slop);
+        chicken.Init("KFC");
+        cow.Init("Burger King");
+        pig.Init("Porkshop");
         animals.Add(chicken);
         animals.Add(cow);
         animals.Add(pig);
@@ -32,11 +32,19 @@ public class GameManager : MonoBehaviour
             animal.Feed(5);
         }
 
+        chicken.Feed(FoodType.Hay, 10);
+        chicken.GetStatus();
+
+        chicken.Produce();
         chicken.Feed(FoodType.Seeds, 10);
         chicken.GetStatus();
 
-        chicken.Feed(FoodType.Seeds, 10);
+        chicken.Produce();
         chicken.GetStatus();
+
+        pig.Feed(FoodType.Slop, 10000);
+        pig.Produce();
+        pig.GetStatus();
 
         /*chicken.Feed(FoodType.Hay, 1000);
         chicken.Sleep();
