@@ -29,14 +29,13 @@ public abstract class Animal : MonoBehaviour
     }
 
     private FoodType preferredFood;
-    public FoodType PreferredFood { get; private set; }
+    public FoodType PreferredFood { get; protected set; }
 
-    public void Init(string newName, FoodType preferredFood)
+    public void Init(string newName)
     {
         Name = newName;
         Hunger = 50;
         Happiness = 50;
-        PreferredFood = preferredFood;
     }
 
     /*public void Init(string newName, int newHunger, int newHappy)
@@ -81,15 +80,12 @@ public abstract class Animal : MonoBehaviour
         }
         else if (chosenFood == FoodType.RottenFood)
         {
-            Debug.Log($" {amount} of {chosenFood} was fed to {Name}. Looks like {Name} really didn't like that! Hunger decreased by {amount} but Happiness decreased by 20!");
-            AdjustHunger(amount);
+            Debug.Log($" {amount} of {chosenFood} was fed to {Name}. Looks like {Name} really didn't like that! Happiness decreased by 20!");
             AdjustHappiness(-20);
         }
         else
         {
-            Debug.Log($"{amount} of {chosenFood} was fed to {Name}. Looks like {Name} didn't like it that much, but still ate it... Hunger decreased by {amount} but Happiness decreased by 5!");
-            AdjustHunger(amount);
-            AdjustHappiness(-5);
+            Feed(amount);
         }
     }
 

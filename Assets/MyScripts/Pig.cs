@@ -11,7 +11,8 @@ public class Pig : Animal
     }
     public void Init(string newName) 
     {
-        base.Init(newName, FoodType.Slop);
+        base.Init(newName);
+        PreferredFood = FoodType.Slop;
         Dirt = 0;
     }
 
@@ -22,14 +23,13 @@ public class Pig : Animal
 
     public override string Produce()
     {
-        string defaultText = $"{Name} produced nothing due to not being happy enough.";
         if (Happiness >= 50)
         {
             int amount = Happiness*1/2;
             Dirt += amount;
             Debug.Log($"{Name} produced {amount} dirt!");
         }
-        return defaultText;
+        return $"Total dirt: {Dirt}";
     }
 
     public override void GetStatus()

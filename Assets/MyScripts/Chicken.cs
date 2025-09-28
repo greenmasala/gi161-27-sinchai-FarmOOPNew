@@ -12,7 +12,8 @@ public class Chicken : Animal
 
     public void Init(string newName) 
     {
-        base.Init(newName, FoodType.Seeds);
+        base.Init(newName);
+        PreferredFood = FoodType.Seeds;
         Eggs = 0;
     }
 
@@ -40,10 +41,9 @@ public class Chicken : Animal
 
     public override string Produce()
     {
-        string defaultText = $"{Name} produced nothing due to not being happy enough.";
         if (Happiness <= 50)
         {
-            Debug.Log(defaultText);
+            Debug.Log($"{Name} produced nothing due to not being happy enough.");
         }
         else if (Happiness >= 51 && Happiness <= 79)
         {
@@ -53,9 +53,9 @@ public class Chicken : Animal
         else if (Happiness >= 80)
         {
             Eggs += 3;
-            Debug.Log($"{Name} looks VERY happy and laid 3 eggs!");
+            Debug.Log($"{Name} is VERY happy and laid 3 eggs!");
         }
-            return defaultText;
+        return $"Total eggs: {Eggs}";
     }
 
     public override void GetStatus()

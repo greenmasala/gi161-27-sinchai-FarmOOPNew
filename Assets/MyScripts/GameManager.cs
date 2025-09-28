@@ -32,29 +32,14 @@ public class GameManager : MonoBehaviour
             animal.Feed(5);
         }
 
-        chicken.Feed(FoodType.Hay, 10);
-        chicken.GetStatus();
-
-        chicken.Produce();
-        chicken.Feed(FoodType.Seeds, 10);
-        chicken.GetStatus();
-
+        chicken.Feed(FoodType.Seeds, 30);
         chicken.Produce();
         chicken.GetStatus();
 
-        pig.Feed(FoodType.Slop, 10000);
-        pig.Produce();
+        pig.Feed(FoodType.RottenFood, 20);
         pig.GetStatus();
 
-        /*chicken.Feed(FoodType.Hay, 1000);
-        chicken.Sleep();
-        chicken.GetStatus();
-
-        cow.Feed(FoodType.Hay, 5);
-        cow.Moo();
-        cow.GetStatus();
-
-        pig.Feed(FoodType.Hay, 15);
-        pig.GetStatus();*/
+        pig.Feed(100000000);
+        pig.GetStatus();
     }
 }

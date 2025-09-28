@@ -11,7 +11,8 @@ public class Cow : Animal
 
     public void Init(string newName) 
     {
-        base.Init(newName, FoodType.Hay);
+        base.Init(newName);
+        PreferredFood = FoodType.Hay;
         Milk = 0;
     }
 
@@ -28,14 +29,13 @@ public class Cow : Animal
 
     public override string Produce()
     {
-        string defaultText = $"{Name} produced nothing due to not being happy enough.";
         if (Happiness > 70)
         {
-            int amount = Happiness / 20;
+            int amount = Happiness / 10;
             Milk += amount;
             Debug.Log($"{Name} produced {amount} of milk!");
         }
-        return defaultText;
+        return $"Total milk: {Milk}"; 
     }
 
     public override void GetStatus()
